@@ -28,15 +28,15 @@ layout:
 environment:
   base:
     registry: nvcr.io
-    image: nvidia/ai-workbench/python-cuda122:1.0.3
+    image: nvidia/nemo:24.05
     build_timestamp: "20231214221614"
-    name: Python with CUDA 12.2
+    name: NeMo Framework with CUDA 12.3
     supported_architectures: []
     cuda_version: "12.2"
-    description: A Python Base with CUDA 12.2
+    description: A NeMo Framework base container
     entrypoint_script: ""
     labels:
-    - cuda12.2
+    - cuda12.3
     apps:
     - name: jupyterlab
       type: jupyterlab
@@ -199,6 +199,8 @@ execution:
   secrets:
   - variable: NGC_API_KEY
     description: NGC Personal Key from https://org.ngc.nvidia.com/setup/personal-keys
+  - variable: HF_API_KEY
+    description: HF Token for model access on Hugging Face
   mounts:
   - type: project
     target: /project/
@@ -211,4 +213,8 @@ execution:
   - type: host
     target: /home/workbench/.cache/nvidia-nims/
     description: A path where NIM containers can store and share their cache.
+    options: ""
+  - type: host
+    target: /project/models/
+    description: Where the base and finetuned models will be located on the HOST system
     options: ""
