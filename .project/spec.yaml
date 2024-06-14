@@ -1,12 +1,13 @@
 specVersion: v2
 specMinorVersion: 1
 meta:
-  name: nim-anywhere
-  image: project-nim-anywhere
-  description: Accelerate Your AI Deployment With NVIDIA NIM.
+  name: nemo-framework-kit
+  image: project-nemo-framework-kit
+  description: Accelerate your Generative AI with NeMo Framework and NIMs.
   labels:
   - RAG
   - NIM
+  - NeMo
   createdOn: "2024-05-02T19:47:52Z"
   defaultBranch: main
 layout:
