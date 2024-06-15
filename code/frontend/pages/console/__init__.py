@@ -13,13 +13,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""A collection of pages available to views."""
+"""A page to display the output console to the user."""
 
+from ...common import THEME
+from ..finetune import utils
+from .logger import Logger
+
+from pathlib import Path
 import gradio as gr
+import sys
 
-from .chat import page as chat
-from .control import page as control
-from .finetune import page as finetune
-from .console import page as console
+# load custom style and scripts
+_CSS_FILE = Path(__file__).parent.joinpath("style.css")
+_CSS = open(_CSS_FILE, "r", encoding="UTF-8").read()
 
-__all__ = ["chat", "control", "finetune", "console"]
+sys.stdout = Logger("/project/models/output.log")
+
+with gr.Blocks(theme=THEME, css=_CSS) as page:
+    logs = gr.Textbox(label="Output Console", lines=40, max_lines=40, interactive=False)
+    
+    page.load(utils.read_logs, None, logs, every=1)

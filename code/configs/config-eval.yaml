@@ -1,0 +1,25 @@
+trainer:
+  devices: 1
+model:
+  ################# TODO: Add parameter count ##################
+  restore_from_path: "/project/models/llama2-<PARAMS_HERE>.nemo"
+  ##############################################################
+  peft:
+    restore_from_path: "/project/models/results/checkpoints/megatron_gpt_peft_lora_tuning.nemo"
+  tensor_model_parallel_size: 1
+  pipeline_model_parallel_size: 1
+  megatron_amp_O2: True
+  answer_only_loss: True
+  data: 
+    test_ds:
+      ###################### TODO: Add Test Set ########################
+      file_names: '[/project/data/active_data/<TEST_DATASET_HERE>.jsonl]'
+      ##################################################################
+      names: '[my_test]' 
+      micro_batch_size: 1
+      global_batch_size: 4
+      tokens_to_generate: 10
+      output_file_path_prefix: "/project/models/results/peft_results"
+      write_predictions_to_file: True
+inference:
+  greedy: True

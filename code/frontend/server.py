@@ -32,6 +32,7 @@ app = FastAPI()
 
 # %% define and mount the views
 views: list[view.View] = [
+    view.View("Finetune", left=pages.finetune, right=pages.console),
     view.View("Portability", left=pages.control, right=pages.chat),
     view.View("Responsiveness"),
     view.View("Throughput"),

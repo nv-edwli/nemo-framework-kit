@@ -1,0 +1,64 @@
+trainer:
+  log_every_n_steps: 1
+  precision: "bf16"
+  devices: 1
+  num_nodes: 1
+  val_check_interval: 20
+  max_steps: 60
+model:
+  ################# TODO: Add parameter count ##################
+  restore_from_path: "/project/models/llama2-<PARAMS_HERE>.nemo"
+  ##############################################################
+  peft:
+    peft_scheme: "lora"
+  micro_batch_size: 1
+  global_batch_size: 128
+  tensor_model_parallel_size: 1
+  pipeline_model_parallel_size: 1
+  megatron_amp_O2: True
+  activations_checkpoint_granularity: "selective"
+  activations_checkpoint_num_layers: "null"
+  activations_checkpoint_method: "uniform"
+  optim:
+    name: "fused_adam"
+    lr: 0.0001
+  answer_only_loss: True
+  data: 
+    train_ds:
+      ##################### TODO: Add Training Set ######################
+      file_names: '[/project/data/active_data/<TRAIN_DATASET_HERE>.jsonl]'
+      ###################################################################
+      concat_sampling_probabilities: '[1.0]'
+      max_seq_length: 2048
+      micro_batch_size: 1
+      global_batch_size: 128
+      num_workers: 0
+    validation_ds:
+      ###################### TODO: Add Validation Set ########################
+      file_names: '[/project/data/active_data/<VALIDATION_DATASET_HERE>.jsonl]'
+      ########################################################################
+      max_seq_length: 2048
+      micro_batch_size: 1
+      global_batch_size: 128
+      num_workers: 0
+      metric:
+        name: "loss"
+    test_ds:
+      ###################### TODO: Add Test Set ########################
+      file_names: '[/project/data/active_data/<TEST_DATASET_HERE>.jsonl]'
+      ##################################################################
+      num_workers: 0
+      metric:
+        name: "loss"
+  save_nemo_on_validation_end: False
+exp_manager:
+  create_wandb_logger: False
+  checkpoint_callback_params_mode: "min"
+  explicit_log_dir: "/project/models/results"
+  resume_if_exists: True
+  resume_ignore_no_checkpoint: True
+  create_checkpoint_callback: True
+  checkpoint_callback_params:
+    monitor: "validation_loss"
+    save_best_model: False
+    save_nemo_on_train_end: True
